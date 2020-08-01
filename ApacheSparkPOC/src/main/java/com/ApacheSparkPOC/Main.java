@@ -26,6 +26,8 @@ public class Main {
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		JavaRDD javaRDD = sc.parallelize(inputData);
 		
+		
+		
 		sc.close();
 	}
 

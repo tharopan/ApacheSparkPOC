@@ -1,0 +1,5 @@
+mvn exec:java -Dexec.mainClass=SparkWCExample.spWCexample.MyFirstWordCount -Dexec.args="input.txt"
+
+mvn exec:java -Dexec.mainClass="com.vineetmanohar.module.Main" -Dexec.args="arg0 arg1 arg2" 
+
+mvn exec:java -Dexec.mainClass=com.ApacheSparkPOC.Main
