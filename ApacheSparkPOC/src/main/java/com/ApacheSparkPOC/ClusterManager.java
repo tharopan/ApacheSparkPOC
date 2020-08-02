@@ -76,4 +76,8 @@ public class ClusterManager {
 		return model.getK().length();
 	}
 	
+	public int LDDA(SparkSession spark, String datasetUrl) {
+		return 1;
+	}
+	
 }
