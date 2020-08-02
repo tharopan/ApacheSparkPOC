@@ -10,6 +10,7 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.sql.SparkSession;
 
 import scala.Tuple2;
 
@@ -21,6 +22,12 @@ public class Main {
 		inputData.add(3.5);
 		inputData.add(4.56);
 		inputData.add(4444.33);
+		
+		SparkSession spark = SparkSession
+				  .builder()
+				  .appName("Java Spark SQL basic example")
+				  .config("spark.some.config.option", "some-value")
+				  .getOrCreate();
 		
 		Logger.getLogger("org.apache").setLevel(Level.WARN);
 		
