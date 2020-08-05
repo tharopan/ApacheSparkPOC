@@ -1,13 +1,16 @@
 package com.ApacheSparkPOC;
 
-import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.ml.clustering.GaussianMixture;
+import org.apache.spark.ml.clustering.GaussianMixtureModel;
+import org.apache.spark.ml.clustering.KMeans;
+import org.apache.spark.ml.clustering.KMeansModel;
+import org.apache.spark.ml.evaluation.ClusteringEvaluator;
+import org.apache.spark.ml.linalg.Vector;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
 public class ClusterManager {
-	
 	public int findClusters(SparkSession spark, MLibAlgorithm algorithm , String datasetUrl) {		
 		switch(algorithm) {
 		  case KMeans:
@@ -26,17 +29,13 @@ public class ClusterManager {
 		String algorithm = "libsvm";
 		datasetUrl = "data/mllib/sample_kmeans_data.txt";
 		
-		SparkConf sparkConf = new SparkConf();
-		sparkConf.setAppName("ApacheSparkPOC").setMaster("local");
-		
-		JavaSparkContext sparkContext = new JavaSparkContext(sparkConf);
-		
 		Dataset<Row> dataset = spark.read().format(algorithm).load(datasetUrl);
 		
 		// Trains a k-means model.
-		/*KMeans kmeans = new KMeans().setK(2).setSeed(1L);
+		KMeans kmeans = new KMeans().setK(2).setSeed(1L);
 		KMeansModel model = kmeans.fit(dataset);
 
+		
 		// Make predictions
 		Dataset<Row> predictions = model.transform(dataset);
 
@@ -49,8 +48,10 @@ public class ClusterManager {
 		// Shows the result.
 		Vector[] centers = model.clusterCenters();
 		
-		return centers.count();*/
-		return 1;
+		if(centers != null)
+			return centers.length;
+		else
+			return 0;
 	}
 
 	public int GMMs(SparkSession spark, String datasetUrl) {
@@ -62,9 +63,9 @@ public class ClusterManager {
 		Dataset<Row> dataset = spark.read().format(format).load(datasetUrl);
 
 		// Trains a GaussianMixture model
-	//	GaussianMixture gmm = new GaussianMixture().setK(2);
+		GaussianMixture gmm = new GaussianMixture().setK(2);
 		
-	//	GaussianMixtureModel model = gmm.fit(dataset);
+		GaussianMixtureModel model = gmm.fit(dataset);
 
 		/*// Output the parameters of the mixture model
 		for (int i = 0; i < model.getK(); i++) {
@@ -80,5 +81,5 @@ public class ClusterManager {
 	public int LDDA(SparkSession spark, String datasetUrl) {
 		return 1;
 	}
-	
+
 }

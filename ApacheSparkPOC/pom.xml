@@ -3,13 +3,12 @@
   <groupId>ApacheSparkPOC</groupId>
   <artifactId>ApacheSparkPOC</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  
+  <name>ApacheSparkPOC</name>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
-  
   <dependencies>
   <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-core -->
 	<dependency>
@@ -28,12 +27,11 @@
 	    <groupId>org.apache.hadoop</groupId>
 	    <artifactId>hadoop-hdfs</artifactId>
 	    <version>3.3.0</version>
-	</dependency>
-	<!-- https://mvnrepository.com/artifact/org.apache.spark/spark-mllib -->
+	</dependency> 
 	<dependency>
 	    <groupId>org.apache.spark</groupId>
 	    <artifactId>spark-mllib_2.12</artifactId>
 	    <version>3.0.0</version>
-	</dependency>
+	</dependency>	 	
   </dependencies>
 </project>
