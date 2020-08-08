@@ -7,45 +7,53 @@ import org.apache.spark.sql.types.StructField;
 
 public class DataSizeManager {
 	//This method will return the size in bites
-		public long CalculateDataSize(SparkSession spark, String datasetUrl){
+	public long CalculateDataSize(SparkSession spark, String datasetUrl, double lambda){
+		//size in bits
+		long size= 0;		
+		lambda = lambda == 0 ? 1 : lambda;
+		String format = "libsvm";			
+		Dataset<Row> dataset = spark.read().format(format).load(datasetUrl);
+		
+		long totalRows = dataset.count();		
+		StructField[] fields = dataset.schema().fields();		
+		String dataType = null;
+		
+		for(StructField field: fields) {
+			dataType = field.dataType().typeName();
 			
-			//size in bits
-			long size= 0;
-			
-			String format = "libsvm";
-			
-			Dataset<Row> dataset = spark.read().format(format).load(datasetUrl);
-			
-			
-			long totalRows = dataset.count();
-			
-			StructField[] fields = dataset.schema().fields();
-			
-			String dataType = null;
-			
-			for(StructField field: fields) {
-				dataType = field.dataType().typeName();
-				
-				switch(dataType) {
-					case "int":
-					    size = size +  32 * totalRows;
-					    break;
-					case "long":
-					    size = size + 64 * totalRows;
-						break;
-					case "String":
-						size = size + 2147483647 * totalRows;
-						break;
-					default:					  
-				    // code block
-				}
+			switch(dataType) {
+				case "int":
+					size = size + (long)(lambda * 32 * totalRows);
+					break;
+				case "long":
+					size = size + (long) (lambda * 64 * totalRows);
+					break;
+				case "String":
+					size = size + (long) (lambda * 2147483647 * totalRows);
+					break;
+				case "float":
+					size = size + (long) (lambda * 32 * totalRows);
+					break;
+				case "double":
+					size = size + (long) (lambda * 64 * totalRows);
+					break;
+				case "boolean":
+					size = size + 1 * totalRows;
+					break;
+				case "short":
+					size = size + (long )(lambda * 16 * totalRows);
+					break;
+				case "char":
+					size = size + (long) (lambda * 16 * totalRows);
+					break;
+				case "byte":
+					size = size +  (long) (lambda * 8 * totalRows);
+					break;
+				default:			  
+				// code block
 			}
-			
-			//for(int i= 0, i< dataset.count(); i++) {
-				
-			//}		
-			
-			return size;
-			
 		}
+		
+		return size;			
+	}
 }

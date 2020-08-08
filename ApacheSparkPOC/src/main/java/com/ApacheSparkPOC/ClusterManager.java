@@ -1,5 +1,7 @@
 package com.ApacheSparkPOC;
 
+import org.apache.spark.ml.clustering.BisectingKMeans;
+import org.apache.spark.ml.clustering.BisectingKMeansModel;
 import org.apache.spark.ml.clustering.GaussianMixture;
 import org.apache.spark.ml.clustering.GaussianMixtureModel;
 import org.apache.spark.ml.clustering.KMeans;
@@ -11,18 +13,20 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
 public class ClusterManager {
-	public int findClusters(SparkSession spark, MLibAlgorithm algorithm , String datasetUrl) {		
+	public int findClusters(SparkSession spark, MLibAlgorithm algorithm , String datasetUrl) {
+		int numberOfCluster = 0;	
 		switch(algorithm) {
 		  case KMeans:
-		    return kMeans(spark, datasetUrl);
-		    //break;
+		  	numberOfCluster = kMeans(spark, datasetUrl);
+		    break;
 		  case GMMs:
-		    return GMMs(spark, datasetUrl);
-		    //break;
+		  	numberOfCluster = GMMs(spark, datasetUrl);
+		    break;
 		  default:
-			  return 0;
 		    // code block
 		}
+
+		return numberOfCluster;
 	}
 	
 	public int kMeans(SparkSession spark, String datasetUrl) {
@@ -52,6 +56,30 @@ public class ClusterManager {
 			return centers.length;
 		else
 			return 0;
+	}
+
+	public int bisectingKMeans(SparkSession spark, String dataUrl){
+		// Loads data.
+		Dataset<Row> dataset = spark.read().format("libsvm").load(dataUrl);
+
+		// Trains a bisecting k-means model.
+		BisectingKMeans bkm = new BisectingKMeans().setK(2).setSeed(1);
+		BisectingKMeansModel model = bkm.fit(dataset);
+
+		// Make predictions
+		Dataset<Row> predictions = model.transform(dataset);
+
+		// Evaluate clustering by computing Silhouette score
+		ClusteringEvaluator evaluator = new ClusteringEvaluator();
+
+		double silhouette = evaluator.evaluate(predictions);
+		System.out.println("Silhouette with squared euclidean distance = " + silhouette);
+
+		// Shows the result.
+		System.out.println("Cluster Centers: ");
+		Vector[] centers = model.clusterCenters();
+
+		return centers.length;
 	}
 
 	public int GMMs(SparkSession spark, String datasetUrl) {

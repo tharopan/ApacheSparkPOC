@@ -15,7 +15,6 @@ import scala.Tuple2;
 public class Main {
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		List<Double> inputData = new ArrayList<Double>();
 		inputData.add(3.5);
 		inputData.add(4.56);
@@ -32,22 +31,20 @@ public class Main {
 		wordCount("input.txt");
 	}
 	
-	public static void wordCount(String fileName) {
-		
+	public static void wordCount(String fileName) {		
 		SparkConf sparkConf = new SparkConf();
-		sparkConf.setAppName("ApacheSparkPOC").setMaster("local");
-		
+		sparkConf.setAppName("ApacheSparkPOC").setMaster("local");		
 		JavaSparkContext sparkContext = new JavaSparkContext(sparkConf);
-
         JavaRDD<String> inputFile = sparkContext.textFile(fileName);
+        JavaRDD<String> wordsFromFile = inputFile.flatMap(
+			content -> Arrays.asList(content.split(" ")).iterator()
+			);
 
-        JavaRDD<String> wordsFromFile = inputFile.flatMap(content -> Arrays.asList(content.split(" ")).iterator());
+        JavaPairRDD countData = wordsFromFile.mapToPair(
+			t -> new Tuple2(t, 1)
+			).reduceByKey((x, y) -> (int) x + (int) y);
 
-        JavaPairRDD countData = wordsFromFile.mapToPair(t -> new Tuple2(t, 1)).reduceByKey((x, y) -> (int) x + (int) y);
-
-        countData.saveAsTextFile("CountData");
-        
+        countData.saveAsTextFile("CountData");        
         sparkContext.close();
 	}
-
 }
