@@ -15,25 +15,36 @@ import scala.Tuple2;
 public class Main {
 	
 	public static void main(String[] args) {
-		List<Double> inputData = new ArrayList<Double>();
-		inputData.add(3.5);
-		inputData.add(4.56);
-		inputData.add(4444.33);
+		Logger.getLogger("org.apache").setLevel(Level.OFF);
+
+		// System.out.print("dfdsfsdf");
 		
+		// SparkSession spark = SparkSession
+		// 		  .builder()
+		// 		  .appName("Java Spark SQL basic example")
+		// 		  .config("spark.some.config.option", "some-value")
+		// 		  .getOrCreate();
+
 		SparkSession spark = SparkSession
-				  .builder()
-				  .appName("Java Spark SQL basic example")
-				  .config("spark.some.config.option", "some-value")
-				  .getOrCreate();
+						.builder()
+						.appName("Java Spark SQL basic example")
+						.config("spark.master", "local")
+						.getOrCreate();
+
 		
-		Logger.getLogger("org.apache").setLevel(Level.WARN);
-		
-		wordCount("input.txt");
+		FindLambda fl = new FindLambda(spark);
+		fl.findLambdaValue();
+
+		spark.stop();
+		//  wordCount("input.txt");
 	}
 	
 	public static void wordCount(String fileName) {		
 		SparkConf sparkConf = new SparkConf();
-		sparkConf.setAppName("ApacheSparkPOC").setMaster("local");		
+		sparkConf.setAppName("ApacheSparkPOC").setMaster("local");
+		//Setspark serialization method
+		sparkConf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
+		
 		JavaSparkContext sparkContext = new JavaSparkContext(sparkConf);
         JavaRDD<String> inputFile = sparkContext.textFile(fileName);
         JavaRDD<String> wordsFromFile = inputFile.flatMap(

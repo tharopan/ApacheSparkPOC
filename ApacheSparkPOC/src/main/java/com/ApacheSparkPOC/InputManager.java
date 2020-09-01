@@ -10,7 +10,11 @@ public class InputManager {
 
         Dataset<Row> dataset = null;
         dataset = spark.read().format("libsvm").load("").limit(take);
-        
+
         return dataset;
+    }
+
+    public void writeData(Dataset<Row> dataSet ){
+        
     }
 }

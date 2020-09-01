@@ -6,12 +6,25 @@ import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructField;
 
 public class DataSizeManager {
+
+	private SparkSession spark;
+
+	public DataSizeManager(SparkSession sparkSession){
+		this.spark = sparkSession;
+	}
+
 	//This method will return the size in bites
-	public long CalculateDataSize(SparkSession spark, String datasetUrl, double lambda){
+	public long calculateDataSize(String datasetUrl, String format, double lambda){
 		//size in bits
 		long size= 0;		
 		lambda = lambda == 0 ? 1 : lambda;
-		String format = "libsvm";			
+		
+		// File file = new File(datasetUrl);
+		// if (file.exists() && file.isFile())
+		// {
+		// 	System.out.println("file exists, and it is a file");
+		// }
+
 		Dataset<Row> dataset = spark.read().format(format).load(datasetUrl);
 		
 		long totalRows = dataset.count();		
@@ -28,7 +41,7 @@ public class DataSizeManager {
 				case "long":
 					size = size + (long) (lambda * 64 * totalRows);
 					break;
-				case "String":
+				case "string":
 					size = size + (long) (lambda * 2147483647 * totalRows);
 					break;
 				case "float":

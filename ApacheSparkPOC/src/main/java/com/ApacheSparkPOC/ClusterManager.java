@@ -30,10 +30,10 @@ public class ClusterManager {
 	}
 	
 	public int kMeans(SparkSession spark, String datasetUrl) {
-		String algorithm = "libsvm";
+		String format = "libsvm";
 		datasetUrl = "data/mllib/sample_kmeans_data.txt";
 		
-		Dataset<Row> dataset = spark.read().format(algorithm).load(datasetUrl);
+		Dataset<Row> dataset = spark.read().format("libsvm").load(datasetUrl);
 		
 		// Trains a k-means model.
 		KMeans kmeans = new KMeans().setK(2).setSeed(1L);
