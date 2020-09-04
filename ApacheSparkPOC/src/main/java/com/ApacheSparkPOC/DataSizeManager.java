@@ -18,12 +18,6 @@ public class DataSizeManager {
 		//size in bits
 		long size= 0;		
 		lambda = lambda == 0 ? 1 : lambda;
-		
-		// File file = new File(datasetUrl);
-		// if (file.exists() && file.isFile())
-		// {
-		// 	System.out.println("file exists, and it is a file");
-		// }
 
 		Dataset<Row> dataset = spark.read().format(format).load(datasetUrl);
 		

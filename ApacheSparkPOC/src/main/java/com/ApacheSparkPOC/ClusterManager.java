@@ -31,9 +31,8 @@ public class ClusterManager {
 	
 	public int kMeans(SparkSession spark, String datasetUrl) {
 		String format = "libsvm";
-		datasetUrl = "data/mllib/sample_kmeans_data.txt";
 		
-		Dataset<Row> dataset = spark.read().format("libsvm").load(datasetUrl);
+		Dataset<Row> dataset = spark.read().format(format).load(datasetUrl);
 		
 		// Trains a k-means model.
 		KMeans kmeans = new KMeans().setK(2).setSeed(1L);
@@ -46,10 +45,6 @@ public class ClusterManager {
 		// Evaluate clustering by computing Silhouette score
 		ClusteringEvaluator evaluator = new ClusteringEvaluator();
 
-		//double silhouette = evaluator.evaluate(predictions);
-		//System.out.println("Silhouette with squared euclidean distance = " + silhouette);
-
-		// Shows the result.
 		Vector[] centers = model.clusterCenters();
 		
 		if(centers != null)
@@ -94,16 +89,8 @@ public class ClusterManager {
 		GaussianMixture gmm = new GaussianMixture().setK(2);
 		
 		GaussianMixtureModel model = gmm.fit(dataset);
-
-		/*// Output the parameters of the mixture model
-		for (int i = 0; i < model.getK(); i++) {
-		  System.out.printf("Gaussian %d:\nweight=%f\nmu=%s\nsigma=\n%s\n\n",
-		          i, model.weights()[i], model.gaussians()[i].mean(), model.gaussians()[i].cov());
-		}*/
 		
-		//return model.getK().length();
-		
-		return counter;
+		return model.getK();
 	}
 	
 	public int LDDA(SparkSession spark, String datasetUrl) {
