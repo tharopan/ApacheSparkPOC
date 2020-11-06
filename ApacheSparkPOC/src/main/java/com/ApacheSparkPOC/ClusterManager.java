@@ -1,4 +1,4 @@
-package com.ApacheSparkPOC;
+	package com.ApacheSparkPOC;
 
 import org.apache.spark.ml.clustering.BisectingKMeans;
 import org.apache.spark.ml.clustering.BisectingKMeansModel;
@@ -96,5 +96,4 @@ public class ClusterManager {
 	public int LDDA(SparkSession spark, String datasetUrl) {
 		return 1;
 	}
-
 }

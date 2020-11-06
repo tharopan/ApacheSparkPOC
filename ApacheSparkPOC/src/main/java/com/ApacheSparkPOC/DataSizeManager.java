@@ -9,17 +9,72 @@ public class DataSizeManager {
 
 	private SparkSession spark;
 
-	public DataSizeManager(SparkSession sparkSession){
+	public DataSizeManager(SparkSession sparkSession)
+	{
 		this.spark = sparkSession;
 	}
+
+	// public void Run()
+	// {
+	// 	File folder = new File("C:/Users/Tharo/Documents/ResearchProject/ApacheSparkPOC/ApacheSparkPOC/Data/CalculateLambda");
+	// 	File[] listOfFiles = folder.listFiles();
+	// 	String outputFile = "C:/Users/Tharo/Documents/ResearchProject/ApacheSparkPOC/ApacheSparkPOC/Data/Output/CalculateLambda.txt";
+	// 	StringBuilder sb = new StringBuilder();
+
+	// 	try (
+	// 		BufferedReader br = Files.newBufferedReader(
+	// 			Paths.get(
+	// 				outputFile
+	// 			));
+	// 		BufferedWriter bw = Files.newBufferedWriter(
+	// 			Paths.get(
+	// 				outputFile
+	// 				));
+	// 		)
+	// 	{
+	// 		String line;
+	// 		while ((line = br.readLine()) != null) 
+	// 		{
+    //             sb.append(line).append("\n");
+	// 		}
+			
+	// 		for (File file : listOfFiles) {
+	// 			if (file.isFile()) {
+	// 				System.out.println(file.getName());
+	// 				long calculatedFileSize = calculateDataSize(file.getAbsolutePath(), "csv", 1);
+	// 				long actulFileSize = file.length();
+	// 				System.out.println(
+	// 					file.getName() + 
+	// 					", Actual file size = " + 
+	// 					actulFileSize + 
+	// 					", Calculated file size = " + 
+	// 					calculatedFileSize);
+	
+	// 				String strLine = "ActualFileSize= " + actulFileSize + "::" + "CalculatedFileSize= " + calculatedFileSize;
+	// 				sb.append(strLine).append("\n");
+	// 			}
+	// 		}
+
+	// 		bw.write(sb.toString());
+	// 	}
+	// 	catch (IOException e) 
+	// 	{
+    //         System.err.format("IOException: %s%n", e);
+	// 	}		
+	// }
 
 	//This method will return the size in bites
 	public long calculateDataSize(String datasetUrl, String format, double lambda){
 		//size in bits
 		long size= 0;		
 		lambda = lambda == 0 ? 1 : lambda;
+		Dataset<Row> dataset;
 
-		Dataset<Row> dataset = spark.read().format(format).load(datasetUrl);
+		if(format == "json"){
+			dataset = spark.read().json(datasetUrl);
+		} else {
+			dataset = spark.read().format(format).load(datasetUrl);
+		}
 		
 		long totalRows = dataset.count();		
 		StructField[] fields = dataset.schema().fields();		

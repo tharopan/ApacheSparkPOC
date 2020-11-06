@@ -4,7 +4,17 @@ mvn exec:java -Dexec.mainClass="com.vineetmanohar.module.Main" -Dexec.args="arg0
 
 mvn exec:java -Dexec.mainClass=com.ApacheSparkPOC.Main
 
+sparkContext.textFile("hdfs://...")
+            .flatMap(line => line.split(" "))
+            .map(word => (word, 1)).reduceByKey(_ + _)
+            .saveAsTextFile("hdfs://...")
 
+
+
+Data link
+https://www.stats.govt.nz/large-datasets/csv-files-for-download/
+
+https://archive.org/details/archiveteam-twitter-stream-2020-04
 
 804205014
 
