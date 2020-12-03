@@ -26,9 +26,9 @@ public class FindLambda {
 
     public void Run()
 	{
-		File folder = new File("C:/Users/Tharo/Documents/ResearchProject/ApacheSparkPOC/ApacheSparkPOC/Data/CalculateLambda");
+		File folder = new File("C:/Users/Tharo/Documents/ResearchProject/Data/CalculateLambda");
 		File[] listOfFiles = folder.listFiles();
-		String outputFile = "C:/Users/Tharo/Documents/ResearchProject/ApacheSparkPOC/ApacheSparkPOC/Data/Output/CalculateLambda.txt";
+		String outputFile = "C:/Users/Tharo/Documents/ResearchProject/Data/Output/CalculateLambda.txt";
 		StringBuilder sb = new StringBuilder();
 
 		try (

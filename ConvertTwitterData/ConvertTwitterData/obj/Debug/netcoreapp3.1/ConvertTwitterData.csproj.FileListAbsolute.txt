@@ -1,0 +1,15 @@
+C:\Users\Tharo\Documents\ResearchProject\ApacheSparkPOC\ConvertTwitterData\ConvertTwitterData\bin\Debug\netcoreapp3.1\ConvertTwitterData.exe
+C:\Users\Tharo\Documents\ResearchProject\ApacheSparkPOC\ConvertTwitterData\ConvertTwitterData\obj\Debug\netcoreapp3.1\ConvertTwitterData.csprojAssemblyReference.cache
+C:\Users\Tharo\Documents\ResearchProject\ApacheSparkPOC\ConvertTwitterData\ConvertTwitterData\obj\Debug\netcoreapp3.1\ConvertTwitterData.AssemblyInfoInputs.cache
+C:\Users\Tharo\Documents\ResearchProject\ApacheSparkPOC\ConvertTwitterData\ConvertTwitterData\obj\Debug\netcoreapp3.1\ConvertTwitterData.AssemblyInfo.cs
+C:\Users\Tharo\Documents\ResearchProject\ApacheSparkPOC\ConvertTwitterData\ConvertTwitterData\bin\Debug\netcoreapp3.1\ConvertTwitterData.deps.json
+C:\Users\Tharo\Documents\ResearchProject\ApacheSparkPOC\ConvertTwitterData\ConvertTwitterData\bin\Debug\netcoreapp3.1\ConvertTwitterData.runtimeconfig.json
+C:\Users\Tharo\Documents\ResearchProject\ApacheSparkPOC\ConvertTwitterData\ConvertTwitterData\bin\Debug\netcoreapp3.1\ConvertTwitterData.runtimeconfig.dev.json
+C:\Users\Tharo\Documents\ResearchProject\ApacheSparkPOC\ConvertTwitterData\ConvertTwitterData\bin\Debug\netcoreapp3.1\ConvertTwitterData.dll
+C:\Users\Tharo\Documents\ResearchProject\ApacheSparkPOC\ConvertTwitterData\ConvertTwitterData\bin\Debug\netcoreapp3.1\ConvertTwitterData.pdb
+C:\Users\Tharo\Documents\ResearchProject\ApacheSparkPOC\ConvertTwitterData\ConvertTwitterData\obj\Debug\netcoreapp3.1\ConvertTwitterData.dll
+C:\Users\Tharo\Documents\ResearchProject\ApacheSparkPOC\ConvertTwitterData\ConvertTwitterData\obj\Debug\netcoreapp3.1\ConvertTwitterData.pdb
+C:\Users\Tharo\Documents\ResearchProject\ApacheSparkPOC\ConvertTwitterData\ConvertTwitterData\obj\Debug\netcoreapp3.1\ConvertTwitterData.genruntimeconfig.cache
+C:\Users\Tharo\Documents\ResearchProject\ApacheSparkPOC\ConvertTwitterData\ConvertTwitterData\bin\Debug\netcoreapp3.1\ICSharpCode.SharpZipLib.dll
+C:\Users\Tharo\Documents\ResearchProject\ApacheSparkPOC\ConvertTwitterData\ConvertTwitterData\obj\Debug\netcoreapp3.1\ConvertTwitterData.csproj.CopyComplete
+C:\Users\Tharo\Documents\ResearchProject\ApacheSparkPOC\ConvertTwitterData\ConvertTwitterData\obj\Debug\netcoreapp3.1\ConvertTwitterData.csproj.CoreCompileInputs.cache

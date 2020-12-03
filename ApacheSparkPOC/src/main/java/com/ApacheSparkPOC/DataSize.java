@@ -17,7 +17,7 @@ public class DataSize {
     }
     
     public long calculateDataSize(String datasetUrl, String format){
-        double lambda = 1;
+        double lambda = 0.000000004678626;
         return dsm.calculateDataSize(datasetUrl, format, lambda);
     }
 }

@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "0AeH1kPB4K0VmLXPAlXu/SV7nCkWy9/GdgUHwZ++YJfmB+N5kVxJ0AojC46NWBcW/d3SBZsFXSEKBPqLomZLUw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Tharo\\Documents\\ResearchProject\\ApacheSparkPOC\\ConvertTwitterData\\ConvertTwitterData\\ConvertTwitterData.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Tharo\\.nuget\\packages\\7-zip.commandline\\18.1.0\\7-zip.commandline.18.1.0.nupkg.sha512",
+    "C:\\Users\\Tharo\\.nuget\\packages\\sharpziplib\\1.3.1\\sharpziplib.1.3.1.nupkg.sha512"
+  ],
+  "logs": []
+}

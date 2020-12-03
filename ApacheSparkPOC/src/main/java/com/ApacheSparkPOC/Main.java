@@ -3,6 +3,8 @@ package com.ApacheSparkPOC;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
@@ -21,6 +23,7 @@ public class Main {
 
 		// String dataUrl = "C:/Users/Tharo/Documents/ResearchProject/Data/Input/sample_isotonic_regression_libsvm_data.txt";
 		String dataUrl = "C:/Users/Tharo/Documents/ResearchProject/Data/TwitterInput/";
+		String dataUrl1 = "C:/Users/Tharo/Documents/ResearchProject/Data/TwitterInput1/";
 		long heapThresholdvalue = 512 * 1024 * 8;
 
 		// SparkSession spark = SparkSession
@@ -40,21 +43,30 @@ public class Main {
 						.builder()
 						.appName("Java Spark SQL basic example")
 						.config("spark.master", "local")
-						.config("spark.driver.memory", "1m")
+						.config("spark.eventLog.enabled", true)
+						.config("spark.eventLog.dir", "file:///C:/Spark/Log")
+						.config("spark.driver.memory", "512m")
+						.config("spark.memory.fraction", 0.6)
+						.config("spark.executor.memory", "512m")
+						.config("spark.serialize", "org.apache.spark.serializer.KryoSerializer")
 						.getOrCreate();
 		
 		// FindLambda fl = new FindLambda(spark);
 		// fl.Run();
-
-		// Dataset<Row> df = spark.
-		// 					read().
-		// 					json("C:/Users/Tharo/Documents/ResearchProject/Data/TwitterInput/");
-							
-		// df.printSchema();
-		// df.show(false);
+				
+		long startTime = System.nanoTime();
 		
-		ProcessManager pm = new ProcessManager(spark);
-		pm.Process(dataUrl, "json", heapThresholdvalue);
+		ProcessManager pm = new ProcessManager(spark);		
+		pm.ProcessEAnalyser(dataUrl, "json", heapThresholdvalue);	
+		// pm.Process(dataUrl, "json", heapThresholdvalue);	
+		
+		// String csvDataUrl = "C:/Spark/spark-3.0.0-bin-hadoop2.7/data/mllib/sample_kmeans_data.txt";
+		// ClusterManager cm = new ClusterManager(spark);
+		// int numberofCluster = cm.findClusters(MLibAlgorithm.KMeans, csvDataUrl, "csv");		
+		// System.out.println("Number of cluster(s)" + numberofCluster);
+
+		long stopTime = System.nanoTime();
+		System.out.println("Total elasped time: " + TimeUnit.SECONDS.convert(stopTime - startTime, TimeUnit.NANOSECONDS) + " Sec");
 		
 		// EarthquakeAnalyser eq = new EarthquakeAnalyser(spark);		
 		// eq.AnalyseTweetsWithBulkData(dataUrl, 3.45);

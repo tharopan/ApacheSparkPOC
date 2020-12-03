@@ -13,31 +13,40 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
 public class ClusterManager {
-	public int findClusters(SparkSession spark, MLibAlgorithm algorithm , String datasetUrl) {
+
+	SparkSession spark;
+
+	public ClusterManager(SparkSession sprk){
+		spark = sprk;
+	}
+
+	public int findClusters(MLibAlgorithm algorithm , String datasetUrl, String format) {
 		int numberOfCluster = 0;	
 		switch(algorithm) {
-		  case KMeans:
-		  	numberOfCluster = kMeans(spark, datasetUrl);
-		    break;
-		  case GMMs:
-		  	numberOfCluster = GMMs(spark, datasetUrl);
-		    break;
-		  default:
-		    // code block
+		  	case KMeans:
+		  		numberOfCluster = kMeans(datasetUrl, format);
+		    	break;
+		 	case GMMs:
+		  		numberOfCluster = GMMs(datasetUrl, format);
+				break;
+			case BisectingKMeans:
+				numberOfCluster = bisectingKMeans(datasetUrl, format);
+				break;		
+		 	 default:
+		    	// code block
 		}
 
 		return numberOfCluster;
 	}
 	
-	public int kMeans(SparkSession spark, String datasetUrl) {
-		String format = "libsvm";
+	public int kMeans(String datasetUrl, String format) {
+		format = "libsvm";
 		
 		Dataset<Row> dataset = spark.read().format(format).load(datasetUrl);
 		
 		// Trains a k-means model.
 		KMeans kmeans = new KMeans().setK(2).setSeed(1L);
 		KMeansModel model = kmeans.fit(dataset);
-
 		
 		// Make predictions
 		Dataset<Row> predictions = model.transform(dataset);
@@ -53,9 +62,10 @@ public class ClusterManager {
 			return 0;
 	}
 
-	public int bisectingKMeans(SparkSession spark, String dataUrl){
+	public int bisectingKMeans(String dataUrl, String format){
+		format = "libsvm";
 		// Loads data.
-		Dataset<Row> dataset = spark.read().format("libsvm").load(dataUrl);
+		Dataset<Row> dataset = spark.read().format(format).load(dataUrl);
 
 		// Trains a bisecting k-means model.
 		BisectingKMeans bkm = new BisectingKMeans().setK(2).setSeed(1);
@@ -77,10 +87,10 @@ public class ClusterManager {
 		return centers.length;
 	}
 
-	public int GMMs(SparkSession spark, String datasetUrl) {
+	public int GMMs(String datasetUrl, String format) {
 		int counter = 0;
 		
-		String format = "libsvm";
+		format = "libsvm";
 		datasetUrl = "data/mllib/sample_kmeans_data.txt";
 		// Loads data
 		Dataset<Row> dataset = spark.read().format(format).load(datasetUrl);

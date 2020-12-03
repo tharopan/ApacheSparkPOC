@@ -37,6 +37,7 @@ public class EarthquakeAnalyser
     
     public void AnalyseTweets(String dataurl)
     {
+        System.out.println("Execute Data:");
         Dataset<Row> data = spark
                             .read()
                             .json(dataurl);
@@ -45,86 +46,27 @@ public class EarthquakeAnalyser
         //data.persist(StorageLevel.MEMORY_AND_DISK());
 
         Dataset<Row> inputPositiveData = spark
-                .read()
-                .textFile("C:/Users/Tharo/Documents/ResearchProject/Data/Input/positive.txt")
-                .toDF();
-
-        Dataset<Row> filteredData =  data.filter(col("text").isin(inputPositiveData)).select("text");
-
-        filteredData.show();
-
-        // // Split data into training (60%) and test (40%).
-        // val splits = data.randomSplit(Array(0.6, 0.4), seed = 11L);
-        // val training = splits(0).cache();
-        // val test = splits(1);
-
-        // // Run training algorithm to build the model
-        // val numIterations = 100
-        // val model = SVMWithSGD.train(training, numIterations)
-
-        // // Clear the default threshold.
-        // model.clearThreshold()
-
-        // // Compute raw scores on the test set. 
-        // val scoreAndLabels = test.map { point =>
-        // val score = model.predict(point.features)
-        // (score, point.label)
-        // }
-        
-        // // Get evaluation metrics.
-        // val metrics = new BinaryClassificationMetrics(scoreAndLabels)
-        // val auROC = metrics.areaUnderROC()
-        
-        // println("Area under ROC = " + auROC)
-    }
-
-    public void AnalyseTweetsWithBulkData(String dataUrl, double fraction)
-    {
-        int numberOfsplits = (int)Math.round(fraction) + 1;
-
-        int numberOfConcurrentTask = spark.sparkContext().maxNumConcurrentTasks();
-    
-        // Dataset<Row> data = spark.  
-        //                     read().
-        //                     format("libsvm").
-        //                     load(dataUrl);//sample_earthquate_tweets.txt
-
-        Dataset<Row> data = spark
-                            .read()
-                            .json(dataUrl);
-        
-        //Persist data into memory
-        //data.persist(StorageLevel.MEMORY_AND_DISK());
-
-        System.out.println(SizeEstimator.estimate(data));
-
-        Dataset<Row> inputPositiveData = spark
                             .read()
                             .textFile("C:/Users/Tharo/Documents/ResearchProject/Data/Input/positive.txt")
                             .toDF("text");
 
-        // ArrayList<String> positiveStrings = new ArrayList<String>();
-
-        // inputPositiveData.foreach((ForeachFunction<Row>) row ->  positiveStrings.add(row.toString()));
-
-        // System.out.println(positiveStrings.toArray().length);
-
-        // Dataset<Row> filteredData =  data.filter(
-        //     inputPositiveData.foreach({
-        //         (ForeachFunction<Row>)row -> return col("text").contains(row.toString());
-        //     })).select("text");
-
         Dataset<Row> parallelizedData = data.select("text");
-
-        // Dataset<Row> filteredDataSet = data.select("text").where(
-        //         functions.array_contains(col("text"), positiveStrings.contains(col("text")))
-        //     );
-        // filteredDataSet.show();
 
         Dataset<Row> filteredDataSet = parallelizedData.join(
             inputPositiveData,
             parallelizedData.col("text").contains(inputPositiveData.col("text")));
 
+        //JavaRDD<List<String>> inpufile = filteredDataSet.javaRDD().map(row -> row.getList(0));
+
+        System.out.println(filteredDataSet.count());
+        
+        // JavaRDD<String> wordsFromFile = inpufile.flatMap(
+        //     content -> Arrays.asList().iterator()
+        // );
+        
+            //     JavaPairRDD countData = wordsFromFile.mapToPair(
+            // 		t -> new Tuple2(t, 1)
+            // 		).reduceByKey((x, y) -> (int) x + (int) y);
             // JavaRDD<String> wordsFromFile = filteredDataSet.flatMap(
             //     		content -> Arrays.asList(content.split(" ")).iterator()
             //     		);
@@ -141,6 +83,56 @@ public class EarthquakeAnalyser
             
 
         System.out.println(filteredDataSet.count());
+    }
+
+    public void AnalyseTweetsWithBulkData(String dataUrl, double fraction)
+    {
+        System.out.println("Execute Bulk Data:");
+        int numberOfsplits = (int)Math.round(fraction) + 1;
+
+        int numberOfConcurrentTask = spark.sparkContext().maxNumConcurrentTasks();
+    
+        JavaRDD rdd = spark
+                            .read()
+                            .json(dataUrl).toJavaRDD();
+        
+        Dataset<Row> data = spark.createDataFrame(rdd, Twitter.class);
+        //Persist data into memory
+        //data.persist(StorageLevel.MEMORY_AND_DISK());
+
+        System.out.println("Estimated size of data: " + SizeEstimator.estimate(data));
+
+        Dataset<Row> inputPositiveData = spark
+                            .read()
+                            .textFile("C:/Users/Tharo/Documents/ResearchProject/Data/Input/positive.txt")
+                            .toDF("text");
+
+        
+        Dataset<Row> parallelizedData = data.select("text");
+
+        System.out.println(parallelizedData.count());
+        
+        Dataset<Row> filteredDataSet = parallelizedData.join(
+            inputPositiveData,
+            parallelizedData.col("text").contains(inputPositiveData.col("text")));
+
+        System.out.println(filteredDataSet.count());
+            // JavaRDD<String> wordsFromFile = filteredDataSet.flatMap(
+            //     		content -> Arrays.asList(content.split(" ")).iterator()
+            //     		);
+            
+            //         JavaPairRDD countData = wordsFromFile.mapToPair(
+            //     		t -> new Tuple2(t, 1)
+            //     		).reduceByKey((x, y) -> (int) x + (int) y);
+        
+    
+            
+                //     JavaPairRDD countData = wordsFromFile.mapToPair(
+                // 		t -> new Tuple2(t, 1)
+                // 		).reduceByKey((x, y) -> (int) x + (int) y);
+            
+
+        
 
         // Dataset<Row> filteredDataSet1 = data.flatMap(la, encoder)
         // // Prepare training and test data.
